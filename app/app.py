@@ -8,11 +8,25 @@ import numpy as np
 # ---------------------------------------------------------
 app = Flask(__name__)
 
-# Ruta al modelo y escalador (ajusta si están en otra carpeta)
-modelo_path = r"C:\Users\Usuario\Desktop\house_price_ml\model\house_price_model.pkl"
-escalador_path = r"C:\Users\Usuario\Desktop\house_price_ml\model\scaler.pkl"
+# ---------------------------------------------------------
+# Cargar el modelo y el escalador desde rutas relativas
+# ---------------------------------------------------------
+base_dir = os.path.abspath(os.path.dirname(__file__))
+modelo_path = os.path.join(base_dir, '..', 'model', 'house_price_model.pkl')
+escalador_path = os.path.join(base_dir, '..', 'model', 'scaler.pkl')
 
-# Cargar el modelo y el escalador
+# Convertir rutas a absolutas
+modelo_path = os.path.abspath(modelo_path)
+escalador_path = os.path.abspath(escalador_path)
+
+# Verificar que existan
+if not os.path.exists(modelo_path):
+    raise FileNotFoundError(f"❌ No se encontró el modelo en: {modelo_path}")
+
+if not os.path.exists(escalador_path):
+    raise FileNotFoundError(f"❌ No se encontró el escalador en: {escalador_path}")
+
+# Cargar los archivos
 modelo = joblib.load(modelo_path)
 escalador = joblib.load(escalador_path)
 
@@ -29,24 +43,17 @@ def index():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Obtener los valores del formulario
         area = float(request.form['GrLivArea'])
         calidad = int(request.form['OverallQual'])
         garage = int(request.form['GarageCars'])
         sotano = float(request.form['TotalBsmtSF'])
         anio = int(request.form['YearBuilt'])
 
-        # Crear un arreglo con los datos ingresados
         datos = np.array([[area, calidad, garage, sotano, anio]])
-
-        # Escalar los datos
         datos_escalados = escalador.transform(datos)
-
-        # Hacer la predicción
         prediccion = modelo.predict(datos_escalados)[0]
 
-        # Enviar el resultado a la plantilla
-        return render_template('index.html', prediction=prediccion)
+        return render_template('index.html', prediction=round(prediccion, 2))
 
     except Exception as e:
         return f"❌ Error al realizar la predicción: {e}"
