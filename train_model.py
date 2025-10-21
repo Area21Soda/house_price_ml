@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import joblib
+from math import sqrt
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
@@ -48,7 +49,8 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, 
 y_pred = best_model.predict(X_test)
 
 mae = mean_absolute_error(y_test, y_pred)
-rmse = mean_squared_error(y_test, y_pred, squared=False)
+
+rmse = sqrt(mean_squared_error(y_test, y_pred))
 r2 = r2_score(y_test, y_pred)
 print(f"MAE: {mae:.2f} | RMSE: {rmse:.2f} | R2: {r2:.2f}")
 
