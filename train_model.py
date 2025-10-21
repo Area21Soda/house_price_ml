@@ -10,7 +10,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 # ==============================
 # 1. Cargar datos
 # ==============================
-train = pd.read_csv("train.csv")
+train = pd.read_csv("data/train.csv")
 
 # ==============================
 # 2. Limpieza de datos
