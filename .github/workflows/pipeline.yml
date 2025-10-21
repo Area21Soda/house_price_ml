@@ -1,0 +1,32 @@
+name: CI/CD House Price App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Instalar dependencias
+      run: |
+        pip install -r ci_cd/requirements.txt
+
+    - name: Pruebas de modelo
+      run: |
+        python -m unittest discover tests
+
+    - name: Despliegue en Render
+      if: github.ref == 'refs/heads/main'
+      run: echo "Desplegando en Render o Railway..."

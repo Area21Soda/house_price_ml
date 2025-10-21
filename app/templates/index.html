@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción del Precio de Vivienda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f6fa;
+            color: #2f3640;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            color: #273c75;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 350px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            border-radius: 8px;
+            border: 1px solid #dcdde1;
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background-color: #273c75;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #40739e;
+        }
+        .resultado {
+            margin-top: 20px;
+            background-color: #e1f5fe;
+            padding: 15px;
+            border-radius: 8px;
+            width: 350px;
+            text-align: center;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Predicción del Precio de Vivienda 🏠</h1>
+    <form action="/predict" method="post">
+        <label for="GrLivArea">Área habitable (pies²):</label>
+        <input type="number" name="GrLivArea" required>
+
+        <label for="OverallQual">Calidad general (1 a 10):</label>
+        <input type="number" name="OverallQual" required>
+
+        <label for="GarageCars">N.º de autos en el garaje:</label>
+        <input type="number" name="GarageCars" required>
+
+        <label for="TotalBsmtSF">Área del sótano (pies²):</label>
+        <input type="number" name="TotalBsmtSF" required>
+
+        <label for="YearBuilt">Año de construcción:</label>
+        <input type="number" name="YearBuilt" required>
+
+        <button type="submit">🔍 Predecir Precio</button>
+    </form>
+
+    {% if prediction %}
+    <div class="resultado">
+        💰 <strong>Precio estimado:</strong> ${{ prediction | round(2) }}
+    </div>
+    {% endif %}
+
+</body>
+</html>
